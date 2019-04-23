@@ -17,11 +17,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.os.Build.VERSION_CODES.M;
 
-
-// Create a new class, Mountain, that can hold your JSON data
 
 // Create a ListView as in "Assignment 1 - Toast and ListView"
 
@@ -33,7 +32,9 @@ import static android.os.Build.VERSION_CODES.M;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
+    private List<Mountain> mountainArrayList = new ArrayList<>();
+    private MountainAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         FetchData getJSON = new FetchData();
         getJSON.execute();
-
-
-        ListView listView = (ListView) findViewById(R.id.my_listview);
-
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -142,11 +139,13 @@ public class MainActivity extends AppCompatActivity {
                     m.setArticleURL(auxdata.getString("url"));
                     */
                 }
-                Log.d("a18antsv", mountainArrayList.toString());
-
             } catch(JSONException e) {
                 throw new RuntimeException(e);
             }
+
+            adapter = new MountainAdapter(getApplicationContext(), R.layout.list_item, mountainArrayList);
+            listView = (ListView) findViewById(R.id.my_listview);
+            listView.setAdapter(adapter);
         }
     }
 }
