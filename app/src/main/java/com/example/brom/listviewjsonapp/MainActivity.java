@@ -4,6 +4,11 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +16,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+
+import static android.os.Build.VERSION_CODES.M;
 
 
 // Create a new class, Mountain, that can hold your JSON data
@@ -25,11 +33,19 @@ import java.net.URL;
 
 
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<Mountain> mountainArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FetchData getJSON = new FetchData();
+        getJSON.execute();
+
+
+        ListView listView = (ListView) findViewById(R.id.my_listview);
+
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -95,12 +111,42 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String o) {
-            super.onPostExecute(o);
             // This code executes after we have received our data. The String object o holds
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
+            super.onPostExecute(o);
 
-            // Implement a parsing code that loops through the entire JSON and creates objects
-            // of our newly created Mountain class.
+            try {
+                JSONArray mountains = new JSONArray(o);
+
+                for(int i = 0; i < mountains.length(); i++) {
+                    JSONObject mountain = mountains.getJSONObject(i);
+                    JSONObject auxdata = new JSONObject(mountain.getString("auxdata"));
+
+                    Mountain m = new Mountain(
+                        Integer.parseInt(mountain.getString("ID")),
+                        mountain.getString("name"),
+                        mountain.getInt("size"),
+                        mountain.getString("location"),
+                        auxdata.getString("img"),
+                        auxdata.getString("url")
+                    );
+                    mountainArrayList.add(m);
+
+                    /* Alternative way without arguments according to empty constructor
+                    Mountain m = new Mountain();
+                    m.setId(Integer.parseInt(mountain.getString("id")));
+                    m.setName(mountain.getString("name"));
+                    m.setHeight(mountain.getInt("size"));
+                    m.setLocation(mountain.getString("location"));
+                    m.setImgURL(auxdata.getString("img"));
+                    m.setArticleURL(auxdata.getString("url"));
+                    */
+                }
+                Log.d("a18antsv", mountainArrayList.toString());
+
+            } catch(JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

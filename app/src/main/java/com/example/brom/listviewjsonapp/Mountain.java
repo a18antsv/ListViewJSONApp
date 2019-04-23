@@ -1,18 +1,33 @@
 package com.example.brom.listviewjsonapp;
 
-/**
- * Created by Anton on 2019-04-23.
- */
-
 public class Mountain {
+    private int id;
     private String name;
     private int height;
     private String location;
+    private String imgURL;
+    private String articleURL;
 
-    public Mountain(String name, int height, String location) {
+   public Mountain(int id, String name, int height, String location, String imgURL, String articleURL) {
+        this.id = id;
         this.name = name;
         this.height = height;
         this.location = location;
+        this.imgURL = imgURL;
+        this.articleURL = articleURL;
+    }
+
+    public Mountain(int id, String name, int height) {
+        this.id = id;
+        this.name = name;
+        this.height = height;
+        location = "Unknown";
+        imgURL = "No image";
+        articleURL = "No article";
+    }
+
+    public Mountain() {
+
     }
 
     public String getName() {
@@ -37,6 +52,30 @@ public class Mountain {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public String getArticleURL() {
+        return articleURL;
+    }
+
+    public void setArticleURL(String articleURL) {
+        this.articleURL = articleURL;
     }
 
     public String getInfo() {
