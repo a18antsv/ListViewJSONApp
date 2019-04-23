@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 
@@ -30,11 +31,12 @@ public class MountainAdapter extends ArrayAdapter {
 
         Mountain m = mountainList.get(position);
 
-        //ImageView image = convertView.findViewById(R.id.item_image);
+        ImageView image = convertView.findViewById(R.id.item_image);
         TextView name = convertView.findViewById(R.id.item_name);
         TextView height = convertView.findViewById(R.id.item_height);
         TextView location = convertView.findViewById(R.id.item_location);
 
+        new DownloadImage(image).execute(m.getImgURL());
         name.setText(m.getName());
         height.setText("Height: " + m.getHeight() + "m");
         location.setText("Location: " + m.getLocation());

@@ -11,7 +11,7 @@
         android:id="@+id/item_image"
         android:layout_width="100dp"
         android:layout_height="56dp"
-        app:srcCompat="@mipmap/ic_launcher"/>
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="Mount Everest"
             android:textColor="@color/colorBlackText"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -34,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="Height: 8848m"
             android:textColor="@color/colorBlackText"
             android:textSize="12sp"/>
 
@@ -43,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="Location: Himalayas"
             android:textColor="@color/colorBlackText"
             android:textSize="12sp"/>
 

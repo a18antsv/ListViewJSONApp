@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FetchData getJSON = new FetchData();
-        getJSON.execute();
+        new FetchData().execute();
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
