@@ -1,9 +1,12 @@
 package com.example.brom.listviewjsonapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -36,12 +39,35 @@ public class MainActivity extends AppCompatActivity {
     private MountainAdapter adapter;
     private ListView listView;
 
+    public static final String
+            MOUNTAIN_ID = "MOUNTIAN_ID",
+            MOUNTAIN_NAME = "MOUNTAIN_NAME",
+            MOUNTAIN_LOCATION = "MOUNTAIN_LOCATION",
+            MOUNTAIN_HEIGHT = "MOUNTAIN_HEIGHT",
+            MOUNTAIN_IMAGE = "MOUNTAIN_IMAGE",
+            MOUNTAIN_ARTICLE = "MOUNTAIN_ARTICLE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         new FetchData().execute();
+
+        listView = (ListView) findViewById(R.id.my_listview);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, MountainDetailsActivity.class);
+                intent.putExtra(MOUNTAIN_ID, mountainArrayList.get(i).getId());
+                intent.putExtra(MOUNTAIN_NAME, mountainArrayList.get(i).getName());
+                intent.putExtra(MOUNTAIN_LOCATION, mountainArrayList.get(i).getLocation());
+                intent.putExtra(MOUNTAIN_HEIGHT, mountainArrayList.get(i).getHeight());
+                intent.putExtra(MOUNTAIN_IMAGE, mountainArrayList.get(i).getImgURL());
+                intent.putExtra(MOUNTAIN_ARTICLE, mountainArrayList.get(i).getArticleURL());
+                startActivity(intent);
+            }
+        });
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -143,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             adapter = new MountainAdapter(getApplicationContext(), R.layout.list_item, mountainArrayList);
-            listView = (ListView) findViewById(R.id.my_listview);
             listView.setAdapter(adapter);
         }
     }
