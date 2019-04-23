@@ -5,9 +5,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,18 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.os.Build.VERSION_CODES.M;
-
-
-// Create a ListView as in "Assignment 1 - Toast and ListView"
-
-// Retrieve data from Internet service using AsyncTask and the included networking code
-
-// Parse the retrieved JSON and update the ListView adapter
-
-// Implement a "refresh" functionality using Android's menu system
-
 
 public class MainActivity extends AppCompatActivity {
     private List<Mountain> mountainArrayList = new ArrayList<>();
@@ -58,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), mountainArrayList.get(i).getInfo(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.this, MountainDetailsActivity.class);
                 intent.putExtra(MOUNTAIN_ID, mountainArrayList.get(i).getId());
                 intent.putExtra(MOUNTAIN_NAME, mountainArrayList.get(i).getName());
@@ -68,6 +60,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_refresh) {
+            mountainArrayList.clear();
+            new FetchData().execute();
+            Toast.makeText(getApplicationContext(), "List refreshed", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -154,14 +163,15 @@ public class MainActivity extends AppCompatActivity {
                     );
                     mountainArrayList.add(m);
 
-                    /* Alternative way without arguments according to empty constructor
-                    Mountain m = new Mountain();
-                    m.setId(Integer.parseInt(mountain.getString("id")));
-                    m.setName(mountain.getString("name"));
-                    m.setHeight(mountain.getInt("size"));
-                    m.setLocation(mountain.getString("location"));
-                    m.setImgURL(auxdata.getString("img"));
-                    m.setArticleURL(auxdata.getString("url"));
+                    /*
+                        --Alternative way without arguments according to empty constructor--
+                        Mountain m = new Mountain();
+                        m.setId(Integer.parseInt(mountain.getString("id")));
+                        m.setName(mountain.getString("name"));
+                        m.setHeight(mountain.getInt("size"));
+                        m.setLocation(mountain.getString("location"));
+                        m.setImgURL(auxdata.getString("img"));
+                        m.setArticleURL(auxdata.getString("url"));
                     */
                 }
             } catch(JSONException e) {
